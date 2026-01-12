@@ -1,6 +1,6 @@
 ---
 description: Scaffolds the project and sets up the Conductor environment
-allowed-tools: Bash, Read, Write, Edit, Glob, Grep
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
 argument-hint: "[greenfield | brownfield | resume]"
 ---
 
@@ -71,7 +71,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
         -   **Begin Brownfield Project Initialization Protocol:**
             -   **1.0 Pre-analysis Confirmation:**
                 1.  **Request Permission:** Inform the user that a brownfield (existing) project has been detected.
-                2.  **Ask for Permission:** Request permission for a read-only scan to analyze the project with the following options using the next structure:
+                2.  **Ask for Permission:** Use the `Ask` tool to request permission for a read-only scan to analyze the project with the following options using the next structure:
                     > A) Yes
                     > B) No
                     >
@@ -108,7 +108,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
     -   If a `.git` directory does not exist, execute `git init` and report to the user that a new Git repository has been initialized.
 
 4.  **Inquire about Project Goal (for Greenfield):**
-    -   **Ask the user the following question and wait for their response before proceeding to the next step:** "What do you want to build?"
+    -   **Use the `Ask` tool to ask the user the following question and wait for their response before proceeding to the next step:** "What do you want to build?"
     -   **CRITICAL: You MUST NOT execute any tool calls until the user has provided a response.**
     -   **Upon receiving the user's response:**
         -   Execute `mkdir -p conductor`.
@@ -120,7 +120,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
 
 ### 2.1 Generate Product Guide (Interactive)
 1.  **Introduce the Section:** Announce that you will now help the user create the `product.md`.
-2.  **Ask Questions Sequentially:** Ask one question at a time. Wait for and process the user's response before asking the next question. Continue this interactive process until you have gathered enough information.
+2.  **Ask Questions Sequentially:** Use the `Ask` tool to ask one question at a time. Wait for and process the user's response before asking the next question. Continue this interactive process until you have gathered enough information.
         -   **CONSTRAINT:** Limit your inquiry to a maximum of 5 questions.
         -   **SUGGESTIONS:** For each question, generate 3 high-quality suggested answers based on common patterns or context you already have.
         -   **Example Topics:** Target users, goals, features, etc
@@ -149,19 +149,20 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
 3.  **Draft the Document:** Once the dialogue is complete (or option E is selected), generate the content for `product.md`. If option E was chosen, use your best judgment to infer the remaining details based on previous answers and project context. You are encouraged to expand on the gathered details to create a comprehensive document.
     -   **CRITICAL:** The source of truth for generation is **only the user's selected answer(s)**. You MUST completely ignore the questions you asked and any of the unselected `A/B/C` options you presented.
         -   **Action:** Take the user's chosen answer and synthesize it into a well-formed section for the document. You are encouraged to expand on the user's choice to create a comprehensive and polished output. DO NOT include the conversational options (A, B, C, D, E) in the final file.
-4.  **User Confirmation Loop:** Present the drafted content to the user for review and begin the confirmation loop.
+4.  **User Confirmation Loop:** Present the drafted content to the user for review.
     > "I've drafted the product guide. Please review the following:"
     >
     > ```markdown
     > [Drafted product.md content here]
     > ```
-    >
-    > "What would you like to do next?
-    > A) **Approve:** The document is correct and we can proceed.
-    > B) **Suggest Changes:** Tell me what to modify.
-    >
-    > You can always edit the generated file after this step.
-    > Please respond with A or B."
+    
+    Then, use the `Ask` tool to ask:
+    "What would you like to do next?
+    A) **Approve:** The document is correct and we can proceed.
+    B) **Suggest Changes:** Tell me what to modify.
+    
+    You can always edit the generated file after this step.
+    Please respond with A or B."
     - **Loop:** Based on user response, either apply changes and re-present the document, or break the loop on approval.
 5.  **Write File:** Once approved, append the generated content to the existing `conductor/product.md` file, preserving the `# Initial Concept` section.
 6.  **Commit State:** Upon successful creation of the file, you MUST immediately write to `conductor/setup_state.json` with the exact content:
@@ -170,7 +171,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
 
 ### 2.2 Generate Product Guidelines (Interactive)
 1.  **Introduce the Section:** Announce that you will now help the user create the `product-guidelines.md`.
-2.  **Ask Questions Sequentially:** Ask one question at a time. Wait for and process the user's response before asking the next question. Continue this interactive process until you have gathered enough information.
+2.  **Ask Questions Sequentially:** Use the `Ask` tool to ask one question at a time. Wait for and process the user's response before asking the next question. Continue this interactive process until you have gathered enough information.
     -   **CONSTRAINT:** Limit your inquiry to a maximum of 5 questions.
     -   **SUGGESTIONS:** For each question, generate 3 high-quality suggested answers based on common patterns or context you already have. Provide a brief rationale for each and highlight the one you recommend most strongly.
     -   **Example Topics:** Prose style, brand messaging, visual identity, etc
@@ -199,19 +200,20 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
 3.  **Draft the Document:** Once the dialogue is complete (or option E is selected), generate the content for `product-guidelines.md`. If option E was chosen, use your best judgment to infer the remaining details based on previous answers and project context. You are encouraged to expand on the gathered details to create a comprehensive document.
      **CRITICAL:** The source of truth for generation is **only the user's selected answer(s)**. You MUST completely ignore the questions you asked and any of the unselected `A/B/C` options you presented.
     -   **Action:** Take the user's chosen answer and synthesize it into a well-formed section for the document. You are encouraged to expand on the user's choice to create a comprehensive and polished output. DO NOT include the conversational options (A, B, C, D, E) in the final file.
-4.  **User Confirmation Loop:** Present the drafted content to the user for review and begin the confirmation loop.
+4.  **User Confirmation Loop:** Present the drafted content to the user for review.
     > "I've drafted the product guidelines. Please review the following:"
     >
     > ```markdown
     > [Drafted product-guidelines.md content here]
     > ```
-    >
-    > "What would you like to do next?
-    > A) **Approve:** The document is correct and we can proceed.
-    > B) **Suggest Changes:** Tell me what to modify.
-    >
-    > You can always edit the generated file after this step.
-    > Please respond with A or B."
+    
+    Then, use the `Ask` tool to ask:
+    "What would you like to do next?
+    A) **Approve:** The document is correct and we can proceed.
+    B) **Suggest Changes:** Tell me what to modify.
+    
+    You can always edit the generated file after this step.
+    Please respond with A or B."
     - **Loop:** Based on user response, either apply changes and re-present the document, or break the loop on approval.
 5.  **Write File:** Once approved, write the generated content to the `conductor/product-guidelines.md` file.
 6.  **Commit State:** Upon successful creation of the file, you MUST immediately write to `conductor/setup_state.json` with the exact content:
@@ -220,7 +222,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
 
 ### 2.3 Generate Tech Stack (Interactive)
 1.  **Introduce the Section:** Announce that you will now help define the technology stacks.
-2.  **Ask Questions Sequentially:** Ask one question at a time. Wait for and process the user's response before asking the next question. Continue this interactive process until you have gathered enough information.
+2.  **Ask Questions Sequentially:** Use the `Ask` tool to ask one question at a time. Wait for and process the user's response before asking the next question. Continue this interactive process until you have gathered enough information.
     -   **CONSTRAINT:** Limit your inquiry to a maximum of 5 questions.
     -   **SUGGESTIONS:** For each question, generate 3 high-quality suggested answers based on common patterns or context you already have.
     -   **Example Topics:** programming languages, frameworks, databases, etc
@@ -248,7 +250,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
     -   **FOR EXISTING PROJECTS (BROWNFIELD):**
             -   **CRITICAL WARNING:** Your goal is to document the project's *existing* tech stack, not to propose changes.
             -   **State the Inferred Stack:** Based on the code analysis, you MUST state the technology stack that you have inferred. Do not present any other options.
-            -   **Request Confirmation:** After stating the detected stack, you MUST ask the user for a simple confirmation to proceed with options like:
+            -   **Request Confirmation:** After stating the detected stack, you MUST use the `Ask` tool to ask the user for a simple confirmation to proceed with options like:
                 A) Yes, this is correct.
                 B) No, I need to provide the correct tech stack.
             -   **Handle Disagreement:** If the user disputes the suggestion, acknowledge their input and allow them to provide the correct technology stack manually as a last resort.
@@ -256,19 +258,20 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
 3.  **Draft the Document:** Once the dialogue is complete (or option E is selected), generate the content for `tech-stack.md`. If option E was chosen, use your best judgment to infer the remaining details based on previous answers and project context. You are encouraged to expand on the gathered details to create a comprehensive document.
     -   **CRITICAL:** The source of truth for generation is **only the user's selected answer(s)**. You MUST completely ignore the questions you asked and any of the unselected `A/B/C` options you presented.
     -   **Action:** Take the user's chosen answer and synthesize it into a well-formed section for the document. You are encouraged to expand on the user's choice to create a comprehensive and polished output. DO NOT include the conversational options (A, B, C, D, E) in the final file.
-4.  **User Confirmation Loop:** Present the drafted content to the user for review and begin the confirmation loop.
+4.  **User Confirmation Loop:** Present the drafted content to the user for review.
     > "I've drafted the tech stack document. Please review the following:"
     >
     > ```markdown
     > [Drafted tech-stack.md content here]
     > ```
-    >
-    > "What would you like to do next?
-    > A) **Approve:** The document is correct and we can proceed.
-    > B) **Suggest Changes:** Tell me what to modify.
-    >
-    > You can always edit the generated file after this step.
-    > Please respond with A or B."
+    
+    Then, use the `Ask` tool to ask:
+    "What would you like to do next?
+    A) **Approve:** The document is correct and we can proceed.
+    B) **Suggest Changes:** Tell me what to modify.
+    
+    You can always edit the generated file after this step.
+    Please respond with A or B."
     - **Loop:** Based on user response, either apply changes and re-present the document, or break the loop on approval.
 6.  **Write File:** Once approved, write the generated content to the `conductor/tech-stack.md` file.
 7.  **Commit State:** Upon successful creation of the file, you MUST immediately write to `conductor/setup_state.json` with the exact content:
@@ -281,15 +284,15 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
     -   List the available style guides by running `ls templates/code_styleguides/`.
     -   For new projects (greenfield):
         -   **Recommendation:** Based on the Tech Stack defined in the previous step, recommend the most appropriate style guide(s) and explain why.
-        -   Ask the user how they would like to proceed:
+        -   Use the `Ask` tool to ask the user how they would like to proceed:
             A) Include the recommended style guides.
             B) Edit the selected set.
         -   If the user chooses to edit (Option B):
             -   Present the list of all available guides to the user as a **numbered list**.
-            -   Ask the user which guide(s) they would like to copy.
+            -   Use the `Ask` tool to ask the user which guide(s) they would like to copy.
     -   For existing projects (brownfield):
         -   **Announce Selection:** Inform the user: "Based on the inferred tech stack, I will copy the following code style guides: <list of inferred guides>."
-        -   **Ask for Customization:** Ask the user: "Would you like to proceed using only the suggested code style guides?"
+        -   **Ask for Customization:** Use the `Ask` tool to ask the user: "Would you like to proceed using only the suggested code style guides?"
             -   Ask the user for a simple confirmation to proceed with options like:
                     A) Yes, I want to proceed with the suggested code style guides.
                     B) No, I want to add more code style guides.
@@ -301,7 +304,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
 1.  **Copy Initial Workflow:**
     -   Copy `templates/workflow.md` to `conductor/workflow.md`.
 2.  **Customize Workflow:**
-    -   Ask the user: "Do you want to use the default workflow or customize it?"
+    -   Use the `Ask` tool to ask the user: "Do you want to use the default workflow or customize it?"
         The default workflow includes:
          - 80% code test coverage
          - Commit changes after every task
@@ -336,7 +339,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
 ### 3.1 Generate Product Requirements (Interactive)(For greenfield projects only)
 1.  **Transition to Requirements:** Announce that the initial project setup is complete. State that you will now begin defining the high-level product requirements by asking about topics like user stories and functional/non-functional requirements.
 2.  **Analyze Context:** Read and analyze the content of `conductor/product.md` to understand the project's core concept.
-3.  **Ask Questions Sequentially:** Ask one question at a time. Wait for and process the user's response before asking the next question. Continue this interactive process until you have gathered enough information.
+3.  **Ask Questions Sequentially:** Use the `Ask` tool to ask one question at a time. Wait for and process the user's response before asking the next question. Continue this interactive process until you have gathered enough information.
     -   **CONSTRAINT** Limit your inquiries to a maximum of 5 questions.
     -   **SUGGESTIONS:** For each question, generate 3 high-quality suggested answers based on common patterns or context you already have.
     *   **General Guidelines:**
@@ -376,7 +379,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
         To create the first track of this project, I suggest the following track:
         - Create user authentication flow for user sign in.
         ```
-3.  **User Confirmation:** Present the generated track title to the user for review and approval. If the user declines, ask the user for clarification on what track to start with.
+3.  **User Confirmation:** Present the generated track title to the user for review. Then use the `Ask` tool to ask for approval. If the user declines, use the `Ask` tool to ask the user for clarification on what track to start with.
 
 ### 3.3 Convert the Initial Track into Artifacts (Automated)
 1.  **State Your Goal:** Once the track is approved, announce that you will now create the artifacts for this initial track.

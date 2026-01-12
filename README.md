@@ -20,17 +20,39 @@ The philosophy behind Conductor is simple: control your code. By treating contex
 
 ## Installation
 
-### Option 1: Install from local directory
+### Prerequisites
+
+- **Claude Code CLI** installed (latest version recommended)
+- **Git** (optional, but recommended for revert feature)
+- Internet connection (for GitHub installation)
+
+## Marketplace Setup
+
+This plugin can be distributed via the Claude Code Plugin Marketplace system. The marketplace configuration is defined in `.claude-plugin/marketplace.json`.
+
+### For Users: Installing from a Marketplace
 
 ```bash
-claude plugin install /path/to/claude-conductor --scope user
-```
-
-### Option 2: Install from marketplace (when available)
-
-```bash
+claude plugin marketplace add premithk/claude-conductor
 claude plugin install conductor --scope user
 ```
+
+### Verify Installation
+
+After installation, verify the plugin is working:
+
+```bash
+# Check if commands are available
+claude --help | grep conductor
+
+# You should see:
+# /conductor:setup
+# /conductor:newTrack
+# /conductor:implement
+# /conductor:status
+# /conductor:revert
+```
+
 
 ## Usage
 
@@ -117,10 +139,45 @@ During implementation, you can also:
 | `/conductor:status` | Displays the current progress of the tracks file and active tracks. | Reads `conductor/tracks.md` |
 | `/conductor:revert` | Reverts a track, phase, or task by analyzing git history. | Reverts git history |
 
+## Troubleshooting
+
+### Plugin not found after installation
+
+**Problem:** Commands don't appear in `--help`
+
+**Solutions:**
+1. Check plugin installation:
+   ```bash
+   ls -la ~/.claude/plugins/ | grep conductor
+   ```
+
+2. Verify plugin.json exists:
+   ```bash
+   cat ~/.claude/plugins/claude-conductor/.claude-plugin/plugin.json
+   ```
+
+3. Restart Claude Code or your terminal
+
+## Development
+
 ## Resources
 
 - [Claude Code Plugins Documentation](https://code.claude.com/docs/en/plugins.md): Documentation about using plugins in Claude Code
 - [Original Gemini Extension](https://github.com/gemini-cli-extensions/conductor): The original Conductor extension for Gemini CLI
+
+## Changelog
+
+### 0.1.0 (Current)
+- Updated to use correct tool names (AskUserQuestion)
+- Added .gitignore for cleaner repositories
+- Reorganized utility scripts
+- Enhanced plugin manifest with contributes section
+- Added CONTRIBUTING.md for developers
+
+### 0.0.1
+- Initial port from Gemini CLI extension
+- Core commands: setup, newTrack, implement, status, revert
+- Template system for workflows and style guides
 
 ## Legal
 

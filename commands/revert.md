@@ -1,6 +1,6 @@
 ---
 description: Reverts previous work
-allowed-tools: Bash, Read, Write, Edit, Glob, Grep
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
 argument-hint: "[track | phase | task] <identifier>"
 ---
 
@@ -36,18 +36,18 @@ Your workflow MUST anticipate and handle common non-linear Git histories, such a
 
     *   **PATH A: Direct Confirmation**
         1.  Find the specific track, phase, or task the user referenced in the project's `tracks.md` or `plan.md` files.
-        2.  Ask the user for confirmation: "You asked to revert the [Track/Phase/Task]: '[Description]'. Is this correct?".
+        2.  Use the `Ask` tool to ask the user for confirmation: "You asked to revert the [Track/Phase/Task]: '[Description]'. Is this correct?".
             - **Structure:**
                 A) Yes
                 B) No
-        3.  If "yes", establish this as the `target_intent` and proceed to Phase 2. If "no", ask clarifying questions to find the correct item to revert.
+        3.  If "yes", establish this as the `target_intent` and proceed to Phase 2. If "no", use the `Ask` tool to ask clarifying questions to find the correct item to revert.
 
     *   **PATH B: Guided Selection Menu**
         1.  **Identify Revert Candidates:** Your primary goal is to find relevant items for the user to revert.
             *   **Scan All Plans:** You MUST read the main `conductor/tracks.md` and every `conductor/tracks/*/plan.md` file.
             *   **Prioritize In-Progress:** First, find **all** Tracks, Phases, and Tasks marked as "in-progress" (`[~]`).
             *   **Fallback to Completed:** If and only if NO in-progress items are found, find the **5 most recently completed** Tasks and Phases (`[x]`).
-        2.  **Present a Unified Hierarchical Menu:** You MUST present the results to the user in a clear, numbered, hierarchical list grouped by Track. The introductory text MUST change based on the context.
+        2.  **Present a Unified Hierarchical Menu:** You MUST use the `Ask` tool to present the results to the user in a clear, numbered, hierarchical list grouped by Track. The introductory text MUST change based on the context.
             *   **Example when in-progress items are found:**
                 > "I found multiple in-progress items. Please choose which one to revert:
                 >
@@ -69,7 +69,7 @@ Your workflow MUST anticipate and handle common non-linear Git histories, such a
                 > 4) A different Track, Task, or Phase."
         3.  **Process User's Choice:**
             *   If the user's response is **A** or **B**, set this as the `target_intent` and proceed directly to Phase 2.
-            *   If the user's response is **C** or another value that does not match A or B, you must engage in a dialogue to find the correct target. Ask clarifying questions like:
+            *   If the user's response is **C** or another value that does not match A or B, you must engage in a dialogue to find the correct target. Use the `Ask` tool to ask clarifying questions like:
                 * "What is the name or ID of the track you are looking for?"
                 * "Can you describe the task you want to revert?"
                 * Once a target is identified, loop back to Path A for final confirmation.
@@ -83,7 +83,7 @@ Your workflow MUST anticipate and handle common non-linear Git histories, such a
 
 1.  **Identify Implementation Commits:**
     *   Find the primary SHA(s) for all tasks and phases recorded in the target's `plan.md`.
-    *   **Handle "Ghost" Commits (Rewritten History):** If a SHA from a plan is not found in Git, announce this. Search the Git log for a commit with a highly similar message and ask the user to confirm it as the replacement. If not confirmed, halt.
+    *   **Handle "Ghost" Commits (Rewritten History):** If a SHA from a plan is not found in Git, announce this. Search the Git log for a commit with a highly similar message and use the `Ask` tool to ask the user to confirm it as the replacement. If not confirmed, halt.
 
 2.  **Identify Associated Plan-Update Commits:**
     *   For each validated implementation commit, use `git log` to find the corresponding plan-update commit that happened *after* it and modified the relevant `plan.md` file.
@@ -111,11 +111,11 @@ Your workflow MUST anticipate and handle common non-linear Git histories, such a
     > `  - <sha_plan_commit> ('conductor(plan): Mark task complete')`
     > *   **Action:** I will run `git revert` on these commits in reverse order.
 
-2.  **Final Go/No-Go:** Ask for final confirmation: "**Do you want to proceed? (yes/no)**".
+2.  **Final Go/No-Go:** Use the `Ask` tool to ask for final confirmation: "**Do you want to proceed? (yes/no)**".
     -   **Structure:**
         A) Yes
         B) No
-    3.  If "yes", proceed to Phase 4. If "no", ask clarifying questions to get the correct plan for revert.
+    3.  If "yes", proceed to Phase 4. If "no", use the `Ask` tool to ask clarifying questions to get the correct plan for revert.
 
 ---
 

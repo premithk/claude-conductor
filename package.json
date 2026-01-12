@@ -1,0 +1,41 @@
+{
+  "name": "claude-conductor",
+  "version": "0.1.0",
+  "description": "Context-driven development framework for Claude Code - Transform AI CLI into a proactive project manager",
+  "author": "Premith K <https://github.com/premithk/claude-conductor>",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/gemini-cli-extensions/conductor",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/premithk/claude-conductor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/premithk/claude-conductor/issues"
+  },
+  "keywords": [
+    "claude-code",
+    "claude",
+    "plugin",
+    "conductor",
+    "project-management",
+    "spec-driven",
+    "tdd",
+    "agile",
+    "workflow",
+    "development",
+    "planning"
+  ],
+  "files": [
+    ".claude-plugin/*",
+    "commands/*",
+    "templates/*",
+    "scripts/*",
+    "README.md",
+    "LICENSE",
+    "CONTRIBUTING.md"
+  ],
+  "scripts": {
+    "validate": "echo 'No build step required - this is a Claude Code plugin'",
+    "test": "echo 'Test by installing with: claude plugin install . --scope user'"
+  }
+}

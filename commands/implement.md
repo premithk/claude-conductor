@@ -1,6 +1,6 @@
 ---
 description: Executes the tasks defined in the specified track's plan
-allowed-tools: Bash, Read, Write, Edit, Glob, Grep
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
 argument-hint: "[track name]"
 ---
 
@@ -41,8 +41,8 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
 4.  **Select Track:**
     -   **If a track name was provided:**
         1.  Perform an exact, case-insensitive match for the provided name against the track descriptions you parsed.
-        2.  If a unique match is found, confirm the selection with the user: "I found track '<track_description>'. Is this correct?"
-        3.  If no match is found, or if the match is ambiguous, inform the user and ask for clarification. Suggest the next available track as below.
+        2.  If a unique match is found, use the `Ask` tool to confirm the selection with the user: "I found track '<track_description>'. Is this correct?"
+        3.  If no match is found, or if the match is ambiguous, inform the user and use the `Ask` tool to ask for clarification. Suggest the next available track as below.
     -   **If no track name was provided (or if the previous step failed):**
         1.  **Identify Next Track:** Find the first track in the parsed tracks file that is NOT marked as `[x] Completed`.
         2.  **If a next track is found:**
@@ -105,7 +105,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
     a.  **Analyze `spec.md`:** Carefully analyze the `spec.md` to identify any new features, changes in functionality, or updates to the technology stack.
     b.  **Update `conductor/product.md`:**
         i. **Condition for Update:** Based on your analysis, you MUST determine if the completed feature or bug fix significantly impacts the description of the product itself.
-        ii. **Propose and Confirm Changes:** If an update is needed, generate the proposed changes. Then, present them to the user for confirmation:
+        ii. **Propose and Confirm Changes:** If an update is needed, generate the proposed changes. Then, use the `Ask` tool to present them to the user for confirmation:
             > "Based on the completed track, I propose the following updates to `product.md`:"
             > ```diff
             > [Proposed changes here]
@@ -114,7 +114,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
         iii. **Action:** Only after receiving explicit user confirmation, perform the file edits to update the `conductor/product.md` file. Keep a record of whether this file was changed.
     c.  **Update `conductor/tech-stack.md`:**
         i. **Condition for Update:** Similarly, you MUST determine if significant changes in the technology stack are detected as a result of the completed track.
-        ii. **Propose and Confirm Changes:** If an update is needed, generate the proposed changes. Then, present them to the user for confirmation:
+        ii. **Propose and Confirm Changes:** If an update is needed, generate the proposed changes. Then, use the `Ask` tool to present them to the user for confirmation:
             > "Based on the completed track, I propose the following updates to `tech-stack.md`:"
             > ```diff
             > [Proposed changes here]
@@ -124,7 +124,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
     d. **Update `conductor/product-guidelines.md` (Strictly Controlled):**
         i. **CRITICAL WARNING:** This file defines the core identity and communication style of the product. It should be modified with extreme caution and ONLY in cases of significant strategic shifts, such as a product rebrand or a fundamental change in user engagement philosophy. Routine feature updates or bug fixes should NOT trigger changes to this file.
         ii. **Condition for Update:** You may ONLY propose an update to this file if the track's `spec.md` explicitly describes a change that directly impacts branding, voice, tone, or other core product guidelines.
-        iii. **Propose and Confirm Changes:** If the conditions are met, you MUST generate the proposed changes and present them to the user with a clear warning:
+        iii. **Propose and Confirm Changes:** If the conditions are met, you MUST generate the proposed changes and use the `Ask` tool to present them to the user with a clear warning:
             > "WARNING: The completed track suggests a change to the core product guidelines. This is an unusual step. Please review carefully:"
             > ```diff
             > [Proposed changes here]
@@ -152,7 +152,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
 
 1.  **Execution Trigger:** This protocol MUST only be executed after the current track has been successfully implemented and the `SYNCHRONIZE PROJECT DOCUMENTATION` step is complete.
 
-2.  **Ask for User Choice:** You MUST prompt the user with the available options for the completed track.
+2.  **Ask for User Choice:** You MUST use the `Ask` tool to prompt the user with the available options for the completed track.
     > "Track '<track_description>' is now complete. What would you like to do?
     > A.  **Archive:** Move the track's folder to `conductor/archive/` and remove it from the tracks file.
     > B.  **Delete:** Permanently delete the track's folder and remove it from the tracks file.
@@ -167,7 +167,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
         iv.  **Commit Changes:** Stage `conductor/tracks.md` and `conductor/archive/`. Commit with the message `chore(conductor): Archive track '<track_description>'`.
         v.   **Announce Success:** Announce: "Track '<track_description>' has been successfully archived."
     *   **If user chooses "B" (Delete):**
-        i. **CRITICAL WARNING:** Before proceeding, you MUST ask for a final confirmation due to the irreversible nature of the action.
+        i. **CRITICAL WARNING:** Before proceeding, you MUST use the `Ask` tool to ask for a final confirmation due to the irreversible nature of the action.
             > "WARNING: This will permanently delete the track folder and all its contents. This action cannot be undone. Are you sure you want to proceed? (yes/no)"
         ii. **Handle Confirmation:**
             - **If 'yes'**:

@@ -1,0 +1,47 @@
+{
+  "name": "conductor",
+  "owner": {
+    "name": "Premith K"
+  },
+  "plugins": [
+    {
+      "name": "conductor",
+      "source": "./",
+      "description": "Transform Claude Code into a proactive project manager. Follow the protocol: Context → Spec & Plan → Implement. Perfect for teams who want consistent, high-quality software development.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Premith K"
+      },
+      "license": "Apache-2.0",
+      "repository": "https://github.com/premithk/claude-conductor",
+      "homepage": "https://github.com/gemini-cli-extensions/conductor",
+      "category": "Development Workflow",
+      "tags": [
+        "project-management",
+        "planning",
+        "spec-driven",
+        "tdd",
+        "agile",
+        "workflow",
+        "development"
+      ],
+      "commands": {
+        "setup": {
+          "content": "Initialize Conductor for your project (run once)\n\nExamples:\n- /conductor:setup\n- /conductor:setup brownfield"
+        },
+        "newTrack": {
+          "content": "Create a new feature or bug track with spec and plan\n\nExamples:\n- /conductor:newTrack\n- /conductor:newTrack Add user authentication"
+        },
+        "implement": {
+          "content": "Execute the tasks in the current track's plan\n\nExamples:\n- /conductor:implement"
+        },
+        "status": {
+          "content": "Show progress overview of all tracks\n\nExamples:\n- /conductor:status"
+        },
+        "revert": {
+          "content": "Revert a track, phase, or task using git-aware logic\n\nExamples:\n- /conductor:revert\n- /conductor:revert track auth-feature"
+        }
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 ---
 description: Plans a track, generates track-specific spec documents and updates the tracks file
-allowed-tools: Bash, Read, Write, Edit, Glob, Grep
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion
 argument-hint: "[track description]"
 ---
 
@@ -34,7 +34,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
 1.  **Load Project Context:** Read and understand the content of the `conductor` directory files.
 2.  **Get Track Description:**
     *   **If `$ARGUMENTS` contains a description:** Use the content of `$ARGUMENTS`.
-    *   **If `$ARGUMENTS` is empty:** Ask the user:
+    *   **If `$ARGUMENTS` is empty:** Use the `Ask` tool to ask the user:
         > "Please provide a brief description of the track (feature, bug fix, chore, etc.) you wish to start."
         Await the user's response and use it as the track description.
 3.  **Infer Track Type:** Analyze the description to determine if it is a "Feature" or "Something Else" (e.g., Bug, Chore, Refactor). Do NOT ask the user to classify it.
@@ -44,7 +44,7 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
 1.  **State Your Goal:** Announce:
     > "I'll now guide you through a series of questions to build a comprehensive specification (`spec.md`) for this track."
 
-2.  **Questioning Phase:** Ask a series of questions to gather details for the `spec.md`. Tailor questions based on the track type (Feature or Other).
+2.  **Questioning Phase:** Use the `Ask` tool to ask a series of questions to gather details for the `spec.md`. Tailor questions based on the track type (Feature or Other).
     *   **CRITICAL:** You MUST ask these questions sequentially (one by one). Do not ask multiple questions in a single turn. Wait for the user's response after each question.
     *   **General Guidelines:**
         *   Refer to information in `product.md`, `tech-stack.md`, etc., to ask context-aware questions.
@@ -78,13 +78,14 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
 
 3.  **Draft `spec.md`:** Once sufficient information is gathered, draft the content for the track's `spec.md` file, including sections like Overview, Functional Requirements, Non-Functional Requirements (if any), Acceptance Criteria, and Out of Scope.
 
-4.  **User Confirmation:** Present the drafted `spec.md` content to the user for review and approval.
+4.  **User Confirmation:** Present the drafted `spec.md` content to the user for review.
     > "I've drafted the specification for this track. Please review the following:"
     >
     > ```markdown
     > [Drafted spec.md content here]
     > ```
-    >
+    
+    Then, use the `Ask` tool to ask:
     > "Does this accurately capture the requirements? Please suggest any changes or confirm."
     Await user feedback and revise the `spec.md` content until confirmed.
 
@@ -103,13 +104,14 @@ CRITICAL: You must validate the success of every tool call. If any tool call fai
         - Sub-task: `    - [ ] ...`
     *   **CRITICAL: Inject Phase Completion Tasks.** Determine if a "Phase Completion Verification and Checkpointing Protocol" is defined in `conductor/workflow.md`. If this protocol exists, then for each **Phase** that you generate in `plan.md`, you MUST append a final meta-task to that phase. The format for this meta-task is: `- [ ] Task: Conductor - User Manual Verification '<Phase Name>' (Protocol in workflow.md)`.
 
-3.  **User Confirmation:** Present the drafted `plan.md` to the user for review and approval.
+3.  **User Confirmation:** Present the drafted `plan.md` to the user for review.
     > "I've drafted the implementation plan. Please review the following:"
     >
     > ```markdown
     > [Drafted plan.md content here]
     > ```
-    >
+    
+    Then, use the `Ask` tool to ask:
     > "Does this plan look correct and cover all the necessary steps based on the spec and our workflow? Please suggest any changes or confirm."
     Await user feedback and revise the `plan.md` content until confirmed.
 
